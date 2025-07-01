@@ -155,6 +155,35 @@ public_users.get('/author-promise/:author', function (req, res) {
         });
 });
 
+public_users.get('/title-promise/:title', function (req, res) {
+    const title = req.params.title;
+
+    const getBooksByTitle = new Promise((resolve, reject) => {
+        const bookKeys = Object.keys(books);
+        let booksByTitle = [];
+
+        bookKeys.forEach(key => {
+            if (books[key].title === title) {
+                booksByTitle.push({ id: key, ...books[key] });
+            }
+        });
+
+        resolve(booksByTitle);
+    });
+
+    getBooksByTitle
+        .then((booksByTitle) => {
+            if (booksByTitle.length > 0) {
+                res.status(200).json(booksByTitle);
+            } else {
+                res.status(404).json({ message: "Title not found!" });
+            }
+        })
+        .catch((err) => {
+            res.status(500).json({ message: "Something went wrong!" });
+        });
+});
+
 
 
 module.exports.general = public_users;
