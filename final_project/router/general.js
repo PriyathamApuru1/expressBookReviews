@@ -98,4 +98,33 @@ public_users.get('/review/:isbn',function (req, res) {
     res.send(books[isbn].reviews);
 });
 
+
+// Tasks using Promise callbacks
+
+public_users.get('/books-promise', function (req, res) {
+    const getBooks = new Promise((resolve, reject) => {
+        resolve(books);
+    });
+
+    getBooks.then((data) => {
+        res.status(200).json(data);
+    }).catch((err) => {
+        res.status(500).json({ message: "Something went wrong!" });
+    });
+});
+
+public_users.get('/isbn-promise/:isbn', function (req, res) {
+    const getBooks = new Promise((resolve, reject) => {
+        const isbn = req.params.isbn;
+        resolve(books[isbn]);
+    });
+
+    getBooks.then((data) => {
+        res.status(200).json(data);
+    }).catch((err) => {
+        res.status(500).json({ message: "Something went wrong!" });
+    });
+});
+
+
 module.exports.general = public_users;
