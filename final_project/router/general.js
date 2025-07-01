@@ -19,7 +19,7 @@ const doesExist = (username) => {
 }
 
 // Register a new user
-app.post("/register", (req, res) => {
+public_users.post("/register", (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
