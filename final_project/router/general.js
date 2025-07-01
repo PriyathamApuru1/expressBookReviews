@@ -126,5 +126,35 @@ public_users.get('/isbn-promise/:isbn', function (req, res) {
     });
 });
 
+public_users.get('/author-promise/:author', function (req, res) {
+    const author = req.params.author;
+
+    const getBooksByAuthor = new Promise((resolve, reject) => {
+        const bookKeys = Object.keys(books);
+        let booksByAuthor = [];
+
+        bookKeys.forEach(key => {
+            if (books[key].author === author) {
+                booksByAuthor.push({ id: key, ...books[key] });
+            }
+        });
+
+        resolve(booksByAuthor);
+    });
+
+    getBooksByAuthor
+        .then((booksByAuthor) => {
+            if (booksByAuthor.length > 0) {
+                res.status(200).json(booksByAuthor);
+            } else {
+                res.status(404).json({ message: "Author not found!" });
+            }
+        })
+        .catch((err) => {
+            res.status(500).json({ message: "Something went wrong!" });
+        });
+});
+
+
 
 module.exports.general = public_users;
